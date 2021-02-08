@@ -39,7 +39,7 @@ module GreenhouseIo
         { 'On-Behalf-Of' => on_behalf_of.to_s }
       )
     end
-    
+
     def create_candidate_attachment(candidate_id, attachment_hash, on_behalf_of)
       post_to_harvest_api(
         "/candidates/#{candidate_id}/attachments",
@@ -47,7 +47,7 @@ module GreenhouseIo
         { 'On-Behalf-Of' => on_behalf_of.to_s }
       )
     end
-    
+
     def create_candidate(candidate_hash, on_behalf_of)
       post_to_harvest_api(
         "/candidates",
@@ -55,7 +55,7 @@ module GreenhouseIo
         { 'On-Behalf-Of' => on_behalf_of.to_s }
       )
     end
-    
+
     def create_prospect(candidate_hash, on_behalf_of)
       post_to_harvest_api(
         "/prospects",
@@ -108,6 +108,14 @@ module GreenhouseIo
       get_from_harvest_api "/sources#{path_id(id)}", options
     end
 
+    def create_job(job_hash, on_behalf_of)
+      post_to_harvest_api(
+        "/jobs",
+        job_hash,
+        { 'On-Behalf-Of' => on_behalf_of.to_s }
+      )
+    end
+
     private
 
     def path_id(id = nil)
@@ -120,7 +128,7 @@ module GreenhouseIo
 
     def get_from_harvest_api(url, options = {})
       response = get_response(url, {
-        :query => permitted_options(options), 
+        :query => permitted_options(options),
         :basic_auth => basic_auth
       })
 
