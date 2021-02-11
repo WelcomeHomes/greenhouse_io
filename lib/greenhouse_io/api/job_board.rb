@@ -50,7 +50,7 @@ module GreenhouseIo
       if response.code == 200
         parse_json(response)
       else
-        raise GreenhouseIo::Error.new(response.code)
+        raise GreenhouseIo::Error.new(response)
       end
     end
 
@@ -59,7 +59,7 @@ module GreenhouseIo
       if response.code == 200
         response.include?("success") ? parse_json(response) : raise(GreenhouseIo::Error.new(response["reason"]))
       else
-        raise GreenhouseIo::Error.new(response.code)
+        raise GreenhouseIo::Error.new(response)
       end
     end
   end
