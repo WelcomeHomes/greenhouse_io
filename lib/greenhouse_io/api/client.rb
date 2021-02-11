@@ -56,6 +56,14 @@ module GreenhouseIo
       )
     end
 
+    def update_candidate(candidate_id, candidate_hash, on_behalf_of)
+      patch_to_harvest_api(
+        "/candidates/#{candidate_id}",
+        candidate_hash,
+        { 'On-Behalf-Of' => on_behalf_of.to_s }
+      )
+    end
+
     def create_prospect(candidate_hash, on_behalf_of)
       post_to_harvest_api(
         "/prospects",
@@ -143,6 +151,22 @@ module GreenhouseIo
 
     def post_to_harvest_api(url, body, headers)
       response = post_response(url, {
+        :body => JSON.dump(body),
+        :basic_auth => basic_auth,
+        :headers => headers
+      })
+
+      set_headers_info(response.headers)
+
+      if response.code == 200 || response.code == 201
+        parse_json(response)
+      else
+        raise GreenhouseIo::Error.new(response.code)
+      end
+    end
+
+    def patch_to_harvest_api(url, body, headers)
+      response = patch_response(url, {
         :body => JSON.dump(body),
         :basic_auth => basic_auth,
         :headers => headers
